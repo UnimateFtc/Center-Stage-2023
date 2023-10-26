@@ -2,6 +2,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,16 +43,17 @@ public class IntakeOpMode extends OpMode {
 
 
     public void runTeleOpControls() {
+        chassiControl();
+        intakeControl();
+    }
 
+    public void chassiControl() {
         double drive = gamepad1.left_stick_y;
         double turn  = -gamepad1.right_stick_x;
         leftMotorPower = Range.clip(drive + turn, -1.00, 1.00) ;
         rightMotorPower = Range.clip(drive - turn, -1.00, 1.00) ;
         leftMotor.setPower(leftMotorPower);
         rightMotor.setPower(rightMotorPower);
-
-        intakeControl();
-
     }
 
     public void intakeControl(){
@@ -100,8 +103,8 @@ public class IntakeOpMode extends OpMode {
 
     }
 
-    @Override
-    public void stop() {
-    }
 
+    @Override
+    public void stop(){
+    }
 }
