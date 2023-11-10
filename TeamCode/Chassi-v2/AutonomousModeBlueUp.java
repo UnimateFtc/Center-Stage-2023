@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Main Autonomous Mode", group="Iterative OpMode")
 
-public class MainAutonomousMode extends OpMode
+public class AutonomousModeBlueUp extends OpMode
 {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -30,7 +30,7 @@ public class MainAutonomousMode extends OpMode
     private int diameter = 9;
     private int ticksRobotRotation = 2200;
 
-    private Servo pixelsServo = null;
+    private Servo pixelServo = null;
 
     private DcMotor leftMotor = null;
     private double leftMotorPower = 0.0;
@@ -51,22 +51,29 @@ public class MainAutonomousMode extends OpMode
 
     @Override
     public void start() {
-        TwoMotorsRunToPosition(leftMotor, rightMotor, ConverterCentimeterToTicks(50));
-        pixelsServo.setPosition(1);
-        TwoMotorsRunToPosition(leftMotor, rightMotor, -ConverterCentimeterToTicks(50));
-        TwoMotorsRotation(leftMotor, rightMotor, 90);
+
+        // leva os dois pixel pra fita
+        TwoMotorsRunToPosition(leftMotor, rightMotor, ConvertCentimeterToTick(50));
+        pixelServo.setPosition(1.0);
+        pixelServo.setPosition(0.5);
+
+        // volta e estaciona no backstage
+        TwoMotorsRunToPosition(leftMotor, rightMotor, ConvertCentimeterToTick(-50));
+        TwoMotorsRotation(leftMotor, rightMotor, ConvertAngleToTick(90));
+        TwoMotorsRunToPosition(leftMotor, rightMotor, ConvertCentimeterToTick(80));
+
     }
 
     @Override
     public void loop() {
     }
 
-    public int ConverterCentimeterToTicks(double destinyCentimeters) {
-        return (int) (ticksRotation * destinyCentimeters) / (int) (diameter * 3.1415);
+    public int ConvertCentimeterToTick(double destinyCentimeters) {
+        return (int) (ticksRotation * destinyCentimeters) / (int) (diameter * 3.14);
     }
 
-    public int ConverterAngleToTicks(int destinyAngle) {
-        return ticksRobotRotation*(destinyAngle/360);
+    public int ConvertAngleToTick(int destinyAngle) {
+        return (int) (2200 * (destinyAngle/360.0));
     }
 
     // Complete Rotation = 2200 ticks
@@ -130,9 +137,9 @@ public class MainAutonomousMode extends OpMode
     }
 
     public void initPixelsServo() {
-        pixelsServo = hardwareMap.get(Servo.class, "servoPixel");
-        pixelsServo.setDirection(Servo.Direction.FORWARD);
-        pixelsServo.setPosition(0.5);
+        pixelServo = hardwareMap.get(Servo.class, "servoPixel");
+        pixelServo.setDirection(Servo.Direction.FORWARD);
+        pixelServo.setPosition(0.5);
     }
 
     public void initIntakeMotor(){
